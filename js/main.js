@@ -83,9 +83,9 @@ var renderAllPins = function (arrayPins) {
   mapPins.appendChild(fragment);
 };
 
-var pins = getArrayOfPins(PIN_COUNT);
+var arrayOfpins = getArrayOfPins(PIN_COUNT);
 
-renderAllPins(pins);
+renderAllPins(arrayOfpins);
 
 
 var map = document.querySelector('.map');
