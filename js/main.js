@@ -84,7 +84,7 @@ var renderPinAttributs = function (pin) {
   return pinElement;
 };
 
-var renderCardAttributs = function (card) {
+var renderCard = function (card) {
 
   var getFeatures = function (features) {
     var featureContainer = cardElement.querySelector('.popup__features');
@@ -118,7 +118,8 @@ var renderCardAttributs = function (card) {
   getFeatures(card.offer.features);
   getPhoto(card.offer.photos);
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
-  return cardElement;
+
+  mapPins.appendChild(cardElement);
 };
 
 var renderAllPins = function (arrayPins) {
@@ -126,12 +127,6 @@ var renderAllPins = function (arrayPins) {
   for (var i = 0; i < arrayPins.length; i++) {
     fragment.appendChild(renderPinAttributs(arrayPins[i]));
   }
-  mapPins.appendChild(fragment);
-};
-
-var renderCard = function (card) {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(renderCardAttributs(card));
   mapPins.appendChild(fragment);
 };
 
