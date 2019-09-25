@@ -26,6 +26,10 @@ var TYPE_OF_HOUSE = {
 var ADVER_TTITLE = ['Свой угол каждому сорванцу!', 'Зеленый свет вашим желаниям!', 'Выбор очевиден!', 'Мирный атом', 'Приветствуем в аду ;)', 'Девичье гнездышко', 'Дыхание природы', 'Дыхание природы'];
 var AVERT_DESCRIPTION = ['Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.', 'Улучшенная планировка и большая площадь. 44 кв.м. общей площади и 9 метровая кухня это гораздо больше, чем в стандартной 1-комнатной квартире.', 'Удобная геометрия квартиры. Благодаря алькову расположенному в комнате можно выделить спальную зону или установить большой шкаф-купе без ущерба функционалу жилого пространства.', 'Можно дышать свежим воздухом не вдыхая смог проезжающего автотранспорта благодаря тому, что окна квартиры выходят на парк.', 'Квартира в 2-х уровнях, практически свой дом. 100 квадратных метров света и уюта. Живите и радуйтесь жизни в лучах солнца.', 'Милорд, при первой же возможности непримените заглянуть в местную котельную: там вы получите тонну положительного... угля.', 'Но захват мира должен быть довольно-таки весёлым занятием.', 'Реши задачу. Какой окружности у тебя будет синяк, если ты мне не занесёшь долг вечером?'];
 
+// Клавиши
+var ESC__KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 var mapPins = document.querySelector('.map__pins');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -130,11 +134,45 @@ var renderAllPins = function (arrayPins) {
   mapPins.appendChild(fragment);
 };
 
+
 var arrayOfPins = getArrayOfPins(PIN_COUNT);
 
+/*
 renderAllPins(arrayOfPins);
 renderCard(arrayOfPins[0]);
 
-
-var map = document.querySelector('.map');
 map.classList.remove('map--faded');
+*/
+
+// module4-task1
+var map = document.querySelector('.map');
+var filterForm = map.querySelector('.map__filters');
+var mainPin = map.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+
+var switchFormElement = function (form, toggle) {
+  var elems = form.elements;
+  for (var i = 0; i < elems.length; i++) {
+    elems[i].disabled = toggle;
+  }
+};
+
+var getActiveState = function () {
+  switchFormElement(filterForm, false);
+  switchFormElement(adForm, false);
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+};
+
+switchFormElement(filterForm, true);
+switchFormElement(adForm, true);
+
+mainPin.addEventListener('mousedown', function () {
+  getActiveState();
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    getActiveState();
+  }
+});
