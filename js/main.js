@@ -148,6 +148,7 @@ map.classList.remove('map--faded');
 var map = document.querySelector('.map');
 var filterForm = map.querySelector('.map__filters');
 var mainPin = map.querySelector('.map__pin--main');
+var mainPinPosition = document.querySelector('#address');
 var adForm = document.querySelector('.ad-form');
 
 var switchFormElement = function (form, toggle) {
@@ -157,11 +158,20 @@ var switchFormElement = function (form, toggle) {
   }
 };
 
+var getDefautPinPosition = function () {
+  var position = {
+    'x': mainPin.offsetLeft - OFFSET_X,
+    'y': mainPin.offsetTop - OFFSET_Y,
+  };
+  return (position.x + ', ' + position.y);
+};
+
 var getActiveState = function () {
   switchFormElement(filterForm, false);
   switchFormElement(adForm, false);
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
+  mainPinPosition.value = getDefautPinPosition();
 };
 
 switchFormElement(filterForm, true);
