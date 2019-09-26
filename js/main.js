@@ -205,9 +205,11 @@ var renderCapacity = function () {
   for (var i = 0; i < options.length; i++) {
     if (place.includes(options[i].value)) {
       options[i].disabled = false;
-      options[i].selected = true;
     } else {
       options[i].disabled = true;
+      if (options[i].selected) {
+        options[i].selected = false;
+      }
     }
   }
 };
