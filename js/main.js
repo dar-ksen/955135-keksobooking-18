@@ -182,7 +182,7 @@ var arrayOfPins = getArrayOfPins(PIN_COUNT);
 switchFormElement(filterForm, true);
 switchFormElement(adForm, true);
 
-// ограничения накладываемые на поле.
+// ограничения накладываемые на поле. Возможно стоит вынести в отдельный файл form.js
 
 var timeIn = adForm.querySelector('#timein');
 var timeOut = adForm.querySelector('#timeout');
@@ -198,21 +198,6 @@ var numberPlace = {
   '100': ['0']
 };
 
-
-var renderCapacity = function () {
-  var options = capacity.querySelectorAll('option');
-  var place = numberPlace[roomNumber.options[roomNumber.selectedIndex].value];
-  for (var i = 0; i < options.length; i++) {
-    if (place.includes(options[i].value)) {
-      options[i].disabled = false;
-    } else {
-      options[i].disabled = true;
-      if (options[i].selected) {
-        options[i].selected = false;
-      }
-    }
-  }
-};
 
 var typeHousingPrice = {
   'bungalo': {
@@ -233,8 +218,24 @@ var typeHousingPrice = {
   },
 };
 
+
 var getActiveSelectOptionValue = function (selectElement) {
   return selectElement.options[selectElement.selectedIndex].value;
+};
+
+var renderCapacity = function () {
+  var options = capacity.querySelectorAll('option');
+  var place = numberPlace[getActiveSelectOptionValue(roomNumber)];
+  for (var i = 0; i < options.length; i++) {
+    if (place.includes(options[i].value)) {
+      options[i].disabled = false;
+    } else {
+      options[i].disabled = true;
+      if (options[i].selected) {
+        options[i].selected = false;
+      }
+    }
+  }
 };
 
 type.addEventListener('change', function () {
