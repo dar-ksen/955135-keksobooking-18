@@ -198,28 +198,18 @@ var numberPlace = {
   '100': ['0']
 };
 
-var placeMap = {
-  '0': 'не для гостей',
-  '1': 'для 1 гостя',
-  '2': 'для 2 гостей',
-  '3': 'для 3 гостей',
-};
 
 var renderCapacity = function () {
-  var optionTemplate = capacity.querySelector('option');
-  optionTemplate.selected = false;
-  while (capacity.firstChild) {
-    capacity.removeChild(capacity.firstChild);
-  }
+  var options = capacity.querySelectorAll('option');
   var place = numberPlace[roomNumber.options[roomNumber.selectedIndex].value];
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < place.length; i++) {
-    var option = optionTemplate.cloneNode(true);
-    option.value = place[i];
-    option.text = placeMap[place[i]];
-    fragment.appendChild(option);
+  for (var i = 0; i < options.length; i++) {
+    if (place.includes(options[i].value)) {
+      options[i].disabled = false;
+      options[i].selected = true;
+    } else {
+      options[i].disabled = true;
+    }
   }
-  capacity.appendChild(fragment);
 };
 
 var typeHousingPrice = {
