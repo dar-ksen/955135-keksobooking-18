@@ -18,7 +18,7 @@ var LOCATION_X_MAX = 1200;
 var LOCATION_Y_MIN = 130;
 var LOCATION_Y_MAX = 630;
 var TYPE_OF_HOUSE = {
-  'palace': 'Дворец ',
+  'palace': 'Дворец',
   'flat': 'Квартира',
   'house': 'Дом',
   'bungalo': 'Бунгало',
@@ -27,7 +27,6 @@ var ADVER_TTITLE = ['Свой угол каждому сорванцу!', 'Зе�
 var AVERT_DESCRIPTION = ['Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.', 'Улучшенная планировка и большая площадь. 44 кв.м. общей площади и 9 метровая кухня это гораздо больше, чем в стандартной 1-комнатной квартире.', 'Удобная геометрия квартиры. Благодаря алькову расположенному в комнате можно выделить спальную зону или установить большой шкаф-купе без ущерба функционалу жилого пространства.', 'Можно дышать свежим воздухом не вдыхая смог проезжающего автотранспорта благодаря тому, что окна квартиры выходят на парк.', 'Квартира в 2-х уровнях, практически свой дом. 100 квадратных метров света и уюта. Живите и радуйтесь жизни в лучах солнца.', 'Милорд, при первой же возможности непримените заглянуть в местную котельную: там вы получите тонну положительного... угля.', 'Но захват мира должен быть довольно-таки весёлым занятием.', 'Реши задачу. Какой окружности у тебя будет синяк, если ты мне не занесёшь долг вечером?'];
 
 // Клавиши
-var ESC__KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
 var mapPins = document.querySelector('.map__pins');
@@ -135,16 +134,6 @@ var renderAllPins = function (arrayPins) {
 };
 
 
-var arrayOfPins = getArrayOfPins(PIN_COUNT);
-
-/*
-renderAllPins(arrayOfPins);
-renderCard(arrayOfPins[0]);
-
-map.classList.remove('map--faded');
-*/
-
-// module4-task1
 var map = document.querySelector('.map');
 var filterForm = map.querySelector('.map__filters');
 var mainPin = map.querySelector('.map__pin--main');
@@ -160,22 +149,24 @@ var switchFormElement = function (form, toggle) {
 
 var getDefautPinPosition = function () {
   var position = {
-    'x': mainPin.offsetLeft - OFFSET_X,
-    'y': mainPin.offsetTop - OFFSET_Y,
+    'x': mainPin.offsetLeft + OFFSET_X,
+    'y': mainPin.offsetTop + OFFSET_Y,
   };
   return (position.x + ', ' + position.y);
 };
 
 var getActiveState = function () {
-  switchFormElement(filterForm, false);
-  switchFormElement(adForm, false);
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  mainPinPosition.value = getDefautPinPosition();
+  if (map.classList.contains('map--faded')) {
+    switchFormElement(filterForm, false);
+    switchFormElement(adForm, false);
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+    mainPinPosition.value = getDefautPinPosition();
+    renderAllPins(arrayOfPins);
+    renderCard(arrayOfPins[0]);
+    renderCapacity();
+  }
 };
-
-switchFormElement(filterForm, true);
-switchFormElement(adForm, true);
 
 mainPin.addEventListener('mousedown', function () {
   getActiveState();
@@ -185,4 +176,88 @@ mainPin.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     getActiveState();
   }
+});
+
+var arrayOfPins = getArrayOfPins(PIN_COUNT);
+switchFormElement(filterForm, true);
+switchFormElement(adForm, true);
+
+// ограничения накладываемые на поле.
+
+var timeIn = adForm.querySelector('#timein');
+var timeOut = adForm.querySelector('#timeout');
+var price = adForm.querySelector('#price');
+var type = adForm.querySelector('#type');
+var roomNumber = adForm.querySelector('#room_number');
+var capacity = adForm.querySelector('#capacity');
+
+var numberPlace = {
+  '1': ['1'],
+  '2': ['2', '1'],
+  '3': ['3', '2', '1'],
+  '100': ['0']
+};
+
+var placeMap = {
+  '0': 'не для гостей',
+  '1': 'для 1 гостя',
+  '2': 'для 2 гостей',
+  '3': 'для 3 гостей',
+};
+
+var renderCapacity = function () {
+  var optionTemplate = capacity.querySelector('option');
+  optionTemplate.selected = false;
+  while (capacity.firstChild) {
+    capacity.removeChild(capacity.firstChild);
+  }
+  var place = numberPlace[roomNumber.options[roomNumber.selectedIndex].value];
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < place.length; i++) {
+    var option = optionTemplate.cloneNode(true);
+    option.value = place[i];
+    option.text = placeMap[place[i]];
+    fragment.appendChild(option);
+  }
+  capacity.appendChild(fragment);
+};
+
+var typeHousingPrice = {
+  'bungalo': {
+    'min': 0,
+    'max': 1000000,
+  },
+  'flat': {
+    'min': 1000,
+    'max': 1000000,
+  },
+  'house': {
+    'min': 5000,
+    'max': 1000000,
+  },
+  'palace': {
+    'min': 10000,
+    'max': 1000000,
+  },
+};
+
+var getActiveSelectOptionValue = function (selectElement) {
+  return selectElement.options[selectElement.selectedIndex].value;
+};
+
+type.addEventListener('change', function () {
+  var key = getActiveSelectOptionValue(type);
+  price.min = typeHousingPrice[key].min;
+  price.placeholder = typeHousingPrice[key].min;
+});
+
+roomNumber.addEventListener('change', function () {
+  renderCapacity();
+});
+
+timeIn.addEventListener('change', function () {
+  timeOut.value = timeIn.value;
+});
+timeOut.addEventListener('change', function () {
+  timeIn.value = timeOut.value;
 });
