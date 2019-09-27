@@ -17,12 +17,26 @@ var LOCATION_X_MIN = 1;
 var LOCATION_X_MAX = 1200;
 var LOCATION_Y_MIN = 130;
 var LOCATION_Y_MAX = 630;
+var NUMBER_OF_ROOMS_EXSEPTION = '100';
 var TYPE_OF_HOUSE = {
-  'palace': 'Дворец',
-  'flat': 'Квартира',
-  'house': 'Дом',
-  'bungalo': 'Бунгало',
+  'palace': {
+    'text': 'Дворец',
+    'minPrice': 10000,
+  },
+  'house': {
+    'text': 'Дом',
+    'minPrice': 5000,
+  },
+  'flat': {
+    'text': 'Квартира',
+    'minPrice': 1000,
+  },
+  'bungalo': {
+    'text': 'Бунгало',
+    'minPrice': 0,
+  },
 };
+
 var ADVER_TTITLE = ['Свой угол каждому сорванцу!', 'Зеленый свет вашим желаниям!', 'Выбор очевиден!', 'Мирный атом', 'Приветствуем в аду ;)', 'Девичье гнездышко', 'Дыхание природы', 'Дыхание природы'];
 var AVERT_DESCRIPTION = ['Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.', 'Улучшенная планировка и большая площадь. 44 кв.м. общей площади и 9 метровая кухня это гораздо больше, чем в стандартной 1-комнатной квартире.', 'Удобная геометрия квартиры. Благодаря алькову расположенному в комнате можно выделить спальную зону или установить большой шкаф-купе без ущерба функционалу жилого пространства.', 'Можно дышать свежим воздухом не вдыхая смог проезжающего автотранспорта благодаря тому, что окна квартиры выходят на парк.', 'Квартира в 2-х уровнях, практически свой дом. 100 квадратных метров света и уюта. Живите и радуйтесь жизни в лучах солнца.', 'Милорд, при первой же возможности непримените заглянуть в местную котельную: там вы получите тонну положительного... угля.', 'Но захват мира должен быть довольно-таки весёлым занятием.', 'Реши задачу. Какой окружности у тебя будет синяк, если ты мне не занесёшь долг вечером?'];
 
@@ -115,7 +129,7 @@ var renderCard = function (card) {
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = TYPE_OF_HOUSE[card.offer.type];
+  cardElement.querySelector('.popup__type').textContent = TYPE_OF_HOUSE[card.offer.type].text;
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
   getFeatures(card.offer.features);
@@ -155,13 +169,12 @@ var getDefautPinPosition = function () {
   return (position.x + ', ' + position.y);
 };
 
-var getActiveState = function () {
+var setActiveState = function () {
   if (map.classList.contains('map--faded')) {
     switchFormElement(filterForm, false);
     switchFormElement(adForm, false);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    mainPinPosition.value = getDefautPinPosition();
     renderAllPins(arrayOfPins);
     renderCard(arrayOfPins[0]);
     renderCapacity();
@@ -169,15 +182,16 @@ var getActiveState = function () {
 };
 
 mainPin.addEventListener('mousedown', function () {
-  getActiveState();
+  setActiveState();
 });
 
 mainPin.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    getActiveState();
+    setActiveState();
   }
 });
 
+mainPinPosition.value = getDefautPinPosition();
 var arrayOfPins = getArrayOfPins(PIN_COUNT);
 switchFormElement(filterForm, true);
 switchFormElement(adForm, true);
@@ -191,44 +205,19 @@ var type = adForm.querySelector('#type');
 var roomNumber = adForm.querySelector('#room_number');
 var capacity = adForm.querySelector('#capacity');
 
-var numberPlace = {
-  '1': ['1'],
-  '2': ['2', '1'],
-  '3': ['3', '2', '1'],
-  '100': ['0']
-};
-
-
-var typeHousingPrice = {
-  'bungalo': {
-    'min': 0,
-    'max': 1000000,
-  },
-  'flat': {
-    'min': 1000,
-    'max': 1000000,
-  },
-  'house': {
-    'min': 5000,
-    'max': 1000000,
-  },
-  'palace': {
-    'min': 10000,
-    'max': 1000000,
-  },
-};
-
-
 var getActiveSelectOptionValue = function (selectElement) {
   return selectElement.options[selectElement.selectedIndex].value;
 };
 
 var renderCapacity = function () {
   var options = capacity.querySelectorAll('option');
-  var place = numberPlace[getActiveSelectOptionValue(roomNumber)];
+  var room = getActiveSelectOptionValue(roomNumber);
   for (var i = 0; i < options.length; i++) {
-    if (place.includes(options[i].value)) {
+    if ((room >= options[i].value) && (options[i].value !== '0')) {
       options[i].disabled = false;
+    } else if ((room === NUMBER_OF_ROOMS_EXSEPTION) && (options[i].value === '0')) {
+      options[i].disabled = false;
+      options[i].selected = true;
     } else {
       options[i].disabled = true;
       if (options[i].selected) {
@@ -240,8 +229,8 @@ var renderCapacity = function () {
 
 type.addEventListener('change', function () {
   var key = getActiveSelectOptionValue(type);
-  price.min = typeHousingPrice[key].min;
-  price.placeholder = typeHousingPrice[key].min;
+  price.min = TYPE_OF_HOUSE[key].minPrice;
+  price.placeholder = TYPE_OF_HOUSE[key].minPrice;
 });
 
 roomNumber.addEventListener('change', function () {
