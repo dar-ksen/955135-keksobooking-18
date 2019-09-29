@@ -7,6 +7,25 @@
   var filterForm = map.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
 
+  var TYPE_OF_HOUSE = {
+    'palace': {
+      'text': 'Дворец',
+      'minPrice': 10000,
+    },
+    'house': {
+      'text': 'Дом',
+      'minPrice': 5000,
+    },
+    'flat': {
+      'text': 'Квартира',
+      'minPrice': 1000,
+    },
+    'bungalo': {
+      'text': 'Бунгало',
+      'minPrice': 0,
+    },
+  };
+
   var isEscEvent = function (evt, action) {
     if (evt.keyCode === ESC_KEYCODE) {
       action();
@@ -34,6 +53,7 @@
     map: map,
     filterForm: filterForm,
     adForm: adForm,
+    TYPE_OF_HOUSE: TYPE_OF_HOUSE,
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
     switchFormElement: switchFormElement,

@@ -32,10 +32,14 @@
     }
   };
 
-  type.addEventListener('change', function () {
+  var getHousingPrice = function () {
     var key = getActiveSelectOptionValue(type);
-    price.min = window.data.typeOfHouse[key].minPrice;
-    price.placeholder = window.data.typeOfHouse[key].minPrice;
+    price.min = window.util.TYPE_OF_HOUSE[key].minPrice;
+    price.placeholder = window.util.TYPE_OF_HOUSE[key].minPrice;
+  };
+
+  type.addEventListener('change', function () {
+    getHousingPrice();
   });
 
   roomNumber.addEventListener('change', function () {
@@ -50,5 +54,6 @@
     timeIn.value = timeOut.value;
   });
 
+  getHousingPrice();
   renderCapacity();
 })();
