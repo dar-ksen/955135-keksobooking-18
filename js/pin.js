@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var map = window.data.map;
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var renderPinAttributs = function (pin) {
@@ -9,6 +10,9 @@
     pinElement.style.top = (pin.location.y - window.data.OFFSET_Y) + 'px';
     pinElement.querySelector('img').src = pin.author.avatar;
     pinElement.querySelector('img').alt = pin.author.avatar;
+    pinElement.addEventListener('click', function () {
+      window.card.renderCard(map, pin);
+    });
     return pinElement;
   };
 
