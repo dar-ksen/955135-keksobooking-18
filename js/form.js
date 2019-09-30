@@ -2,7 +2,7 @@
 
 (function () {
   var NUMBER_OF_ROOMS_EXSEPTION = '100';
-  var adForm = window.util.adForm;
+  var adForm = window.data.adForm;
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
   var price = adForm.querySelector('#price');
@@ -34,8 +34,8 @@
 
   var getHousingPrice = function () {
     var key = getActiveSelectOptionValue(type);
-    price.min = window.util.TYPE_OF_HOUSE[key].minPrice;
-    price.placeholder = window.util.TYPE_OF_HOUSE[key].minPrice;
+    price.min = window.data.TYPE_OF_HOUSE[key].minPrice;
+    price.placeholder = window.data.TYPE_OF_HOUSE[key].minPrice;
   };
 
   type.addEventListener('change', function () {

@@ -5,11 +5,11 @@
   var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
   var mapPins = document.querySelector('.map__pins');
 
-  var map = window.util.map;
-  var filterForm = window.util.filterForm;
+  var map = window.data.map;
+  var filterForm = window.data.filterForm;
   var mainPin = map.querySelector('.map__pin--main');
   var mainPinPosition = document.querySelector('#address');
-  var adForm = window.util.adForm;
+  var adForm = window.data.adForm;
 
   var renderAllPins = function (container, arrayPins) {
     var fragment = document.createDocumentFragment();
@@ -55,7 +55,7 @@
   var isPopupActive = function (popup) {
     return map.contains(popup);
   };
-  */
+
 
   mapPins.addEventListener('click', function (evt) {
     var target = evt.target;
@@ -74,5 +74,6 @@
     }
 
   });
+  */
 
 })();
