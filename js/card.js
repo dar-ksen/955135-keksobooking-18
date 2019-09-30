@@ -18,22 +18,26 @@
 
   var getFeatures = function (card, features) {
     var featureContainer = card.querySelector('.popup__features');
+    var fragment = document.createDocumentFragment();
     cleanContainer(featureContainer);
     for (var i = 0; i < features.length; i++) {
       var feature = featureTemplate.cloneNode(true);
       feature.className = 'popup__feature popup__feature--' + features[i];
-      featureContainer.appendChild(feature);
+      fragment.appendChild(feature);
     }
+    featureContainer.appendChild(fragment);
   };
 
   var getPhoto = function (card, photos) {
     var photoContainer = card.querySelector('.popup__photos');
+    var fragment = document.createDocumentFragment();
     cleanContainer(photoContainer);
     for (var i = 0; i < photos.length; i++) {
       var photo = photoTemplate.cloneNode(true);
       photo.src = photos[i];
-      photoContainer.appendChild(photo);
+      fragment.appendChild(photo);
     }
+    photoContainer.appendChild(fragment);
   };
 
   var createCard = function (cardElement, card) {
@@ -70,7 +74,7 @@
         document.addEventListener('keydown', onPopupEscPress);
         var closeButton = cardElement.querySelector('.popup__close');
         closeButton.addEventListener('click', closePopup);
-        container.appendChild(cardElement);
+        container.insertBefore(cardElement, map.querySelector('.map__pins').nextSibling);
       }
     },
   };
