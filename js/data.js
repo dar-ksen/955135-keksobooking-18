@@ -93,5 +93,9 @@
     OFFSET_X: 25,
     OFFSET_Y: 70,
     getArrayOfPins: getArrayOfPins,
+    LOCATION_X_MIN: 1,
+    LOCATION_X_MAX: 1200,
+    LOCATION_Y_MIN: 130,
+    LOCATION_Y_MAX: 630,
   };
 })();

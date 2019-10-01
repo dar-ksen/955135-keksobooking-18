@@ -2,6 +2,8 @@
 
 (function () {
   var PIN_COUNT = 8;
+  var mainPinOffsetX = 32;
+  var mainPinOffsetY = 70;
   var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
   var mapPins = document.querySelector('.map__pins');
 
@@ -21,10 +23,14 @@
 
   var getDefautPinPosition = function (pin) {
     var position = {
-      'x': pin.offsetLeft + window.data.OFFSET_X,
-      'y': pin.offsetTop + window.data.OFFSET_Y,
+      'x': pin.offsetLeft + mainPinOffsetX,
+      'y': pin.offsetTop + mainPinOffsetY,
     };
-    return (position.x + ', ' + position.y);
+    return position;
+  };
+
+  var setDefautPinPosition = function (pin) {
+    mainPinPosition.value = getDefautPinPosition(pin).x + ', ' + getDefautPinPosition(pin).y;
   };
 
   var setActiveState = function () {
@@ -37,16 +43,61 @@
     }
   };
 
-  mainPin.addEventListener('mousedown', function () {
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
     setActiveState();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      var endCoords = {
+        x: getDefautPinPosition(mainPin).x - shift.x,
+        y: getDefautPinPosition(mainPin).y - shift.y
+      };
+
+      if ((endCoords.x >= window.data.LOCATION_X_MIN) && (endCoords.x <= window.data.LOCATION_X_MAX)) {
+        mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      }
+
+      if ((endCoords.y >= window.data.LOCATION_Y_MIN) && (endCoords.y <= window.data.LOCATION_Y_MAX)) {
+        mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      }
+
+      setDefautPinPosition(mainPin);
+
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
   });
 
   mainPin.addEventListener('keydown', function (evt) {
     window.util.isEnterEvent(evt, setActiveState);
   });
 
-  mainPinPosition.value = getDefautPinPosition(mainPin);
-
+  setDefautPinPosition(mainPin);
   window.util.switchFormElement(filterForm, false);
   window.util.switchFormElement(adForm, false);
 
