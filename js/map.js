@@ -50,30 +50,4 @@
   window.util.switchFormElement(filterForm, false);
   window.util.switchFormElement(adForm, false);
 
-  // 9. Личный проект: доверяй, но проверяй
-  /*
-  var isPopupActive = function (popup) {
-    return map.contains(popup);
-  };
-
-
-  mapPins.addEventListener('click', function (evt) {
-    var target = evt.target;
-    while (target !== mapPins) {
-      if (target.classList.contains('map__pin')) {
-        evt.preventDefault();
-        for (var i = 0; i < arrayOfPins.length; i++) {
-          if (arrayOfPins[i].author.avatar === target.querySelector('img').alt) {
-            // console.log (isPopupActive(document.querySelector('.popup')));
-            window.card.renderCard(map, arrayOfPins[i]);
-          }
-        }
-        return;
-      }
-      target = target.parentNode;
-    }
-
-  });
-  */
-
 })();

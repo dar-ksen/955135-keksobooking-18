@@ -1,9 +1,14 @@
 'use strict';
 
 (function () {
+  var map = window.data.map;
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var photoTemplate = cardTemplate.querySelector('.popup__photo');
   var featureTemplate = cardTemplate.querySelector('.popup__feature');
+
+  var isPopupActive = function (popup) {
+    return map.contains(popup);
+  };
 
   var cleanContainer = function (container) {
     while (container.firstChild) {
@@ -13,26 +18,29 @@
 
   var getFeatures = function (card, features) {
     var featureContainer = card.querySelector('.popup__features');
+    var fragment = document.createDocumentFragment();
     cleanContainer(featureContainer);
     for (var i = 0; i < features.length; i++) {
       var feature = featureTemplate.cloneNode(true);
       feature.className = 'popup__feature popup__feature--' + features[i];
-      featureContainer.appendChild(feature);
+      fragment.appendChild(feature);
     }
+    featureContainer.appendChild(fragment);
   };
 
   var getPhoto = function (card, photos) {
     var photoContainer = card.querySelector('.popup__photos');
+    var fragment = document.createDocumentFragment();
     cleanContainer(photoContainer);
     for (var i = 0; i < photos.length; i++) {
       var photo = photoTemplate.cloneNode(true);
       photo.src = photos[i];
-      photoContainer.appendChild(photo);
+      fragment.appendChild(photo);
     }
+    photoContainer.appendChild(fragment);
   };
 
-  var createCard = function (card) {
-    var cardElement = cardTemplate.cloneNode(true);
+  var createCard = function (cardElement, card) {
     cardElement.querySelector('.popup__avatar').src = card.author.avatar;
     cardElement.querySelector('.popup__title').textContent = card.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -43,12 +51,31 @@
     getFeatures(cardElement, card.offer.features);
     getPhoto(cardElement, card.offer.photos);
     cardElement.querySelector('.popup__description').textContent = card.offer.description;
-    return cardElement;
   };
 
   window.card = {
     renderCard: function (container, card) {
-      container.appendChild(createCard(card));
+      var cardElement = map.querySelector('.popup');
+
+      var closePopup = function () {
+        cardElement.remove();
+        document.removeEventListener('keydown', onPopupEscPress);
+      };
+
+      var onPopupEscPress = function (evt) {
+        window.util.isEscEvent(evt, closePopup);
+      };
+
+      if (isPopupActive(cardElement)) {
+        createCard(cardElement, card);
+      } else {
+        cardElement = cardTemplate.cloneNode(true);
+        createCard(cardElement, card);
+        document.addEventListener('keydown', onPopupEscPress);
+        var closeButton = cardElement.querySelector('.popup__close');
+        closeButton.addEventListener('click', closePopup);
+        container.insertBefore(cardElement, map.querySelector('.map__pins').nextSibling);
+      }
     },
   };
 })();
