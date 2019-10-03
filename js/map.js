@@ -3,7 +3,8 @@
 (function () {
   var PIN_COUNT = 5;
   var mainPinOffsetX = 32;
-  var mainPinOffsetY = 70;
+  var mainPinOffsetYActive = 70;
+  var mainPinOffsetYPassive = 32;
   // var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
   var mapPins = document.querySelector('.map__pins');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -23,9 +24,10 @@
   };
 
   var getDefautPinPosition = function (pin) {
+    var offsetY = map.classList.contains('map--faded') ? mainPinOffsetYPassive : mainPinOffsetYActive;
     var position = {
       'x': pin.offsetLeft + mainPinOffsetX,
-      'y': pin.offsetTop + mainPinOffsetY,
+      'y': pin.offsetTop + offsetY,
     };
     return position;
   };
@@ -103,8 +105,9 @@
   var onload = function (pins) {
     window.util.setFormStatus(filterForm, false);
     window.util.setFormStatus(adForm, false);
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+    map.classList.toggle('map--faded');
+    setDefautPinPosition(mainPin);
+    adForm.classList.toggle('ad-form--disabled');
     renderAllPins(mapPins, pins);
   };
 
