@@ -98,7 +98,7 @@
   window.util.setFormStatus(filterForm, true);
   window.util.setFormStatus(adForm, true);
 
-  // var
+  // загрузка данных
 
   var onload = function (pins) {
     window.util.setFormStatus(filterForm, false);
@@ -122,9 +122,12 @@
     };
 
     var errorPopap = errorTemplate.cloneNode(true);
-    errorPopap.querySelector('.error__message').textContent = errorMessage;
-    document.addEventListener('keydown', onErrorPopupEscPress);
     var closeError = errorPopap.querySelector('.error__button');
+    errorPopap.querySelector('.error__message').textContent = errorMessage;
+
+    document.addEventListener('keydown', onErrorPopupEscPress);
+
+    errorPopap.addEventListener('click', closeErrorPopup);
     closeError.addEventListener('click', closeErrorPopup);
     main.appendChild(errorPopap);
   };
