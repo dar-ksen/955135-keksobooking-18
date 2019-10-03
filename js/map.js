@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // var PIN_COUNT = 8;
+  var PIN_COUNT = 5;
   var mainPinOffsetX = 32;
   var mainPinOffsetY = 70;
   // var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
@@ -16,7 +16,7 @@
 
   var renderAllPins = function (container, arrayPins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arrayPins.length; i++) {
+    for (var i = 0; i < PIN_COUNT; i++) {
       fragment.appendChild(window.pin.renderPinAttributs(arrayPins[i]));
     }
     container.appendChild(fragment);
