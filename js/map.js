@@ -2,6 +2,11 @@
 
 (function () {
   var PIN_COUNT = 5;
+  // var METHOD_POST = 'POST';
+  var METHOD_GET = 'GET';
+  // var URL_SAVE = 'https://js.dump.academy/keksobooking';
+  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
+
   var mainPinOffsetX = 32;
   var mainPinOffsetYActive = 70;
   var mainPinOffsetYPassive = 32;
@@ -38,7 +43,7 @@
 
   var setActiveState = function () {
     if (map.classList.contains('map--faded')) {
-      window.backend.load(onload, onError);
+      window.backend.ajax(onLoad, onError, METHOD_GET, URL_LOAD);
     }
   };
 
@@ -102,7 +107,7 @@
 
   // загрузка данных
 
-  var onload = function (pins) {
+  var onLoad = function (pins) {
     window.util.setFormStatus(filterForm, false);
     window.util.setFormStatus(adForm, false);
     map.classList.toggle('map--faded');
