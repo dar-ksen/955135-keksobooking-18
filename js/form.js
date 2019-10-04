@@ -54,6 +54,8 @@
     timeIn.value = timeOut.value;
   });
 
-  getHousingPrice();
-  renderCapacity();
+  window.form = {
+    'getHousingPrice': getHousingPrice,
+    'renderCapacity': renderCapacity,
+  };
 })();
