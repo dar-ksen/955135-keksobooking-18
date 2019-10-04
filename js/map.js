@@ -1,11 +1,13 @@
 'use strict';
 
 (function () {
-  var PIN_COUNT = 8;
+  var PIN_COUNT = 5;
   var mainPinOffsetX = 32;
-  var mainPinOffsetY = 70;
-  var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
+  var mainPinOffsetYActive = 70;
+  var mainPinOffsetYPassive = 32;
+  // var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
   var mapPins = document.querySelector('.map__pins');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var map = window.data.map;
   var filterForm = window.data.filterForm;
@@ -15,16 +17,17 @@
 
   var renderAllPins = function (container, arrayPins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arrayPins.length; i++) {
+    for (var i = 0; i < PIN_COUNT; i++) {
       fragment.appendChild(window.pin.renderPinAttributs(arrayPins[i]));
     }
     container.appendChild(fragment);
   };
 
   var getDefautPinPosition = function (pin) {
+    var offsetY = map.classList.contains('map--faded') ? mainPinOffsetYPassive : mainPinOffsetYActive;
     var position = {
       'x': pin.offsetLeft + mainPinOffsetX,
-      'y': pin.offsetTop + mainPinOffsetY,
+      'y': pin.offsetTop + offsetY,
     };
     return position;
   };
@@ -35,11 +38,7 @@
 
   var setActiveState = function () {
     if (map.classList.contains('map--faded')) {
-      window.util.switchFormElement(filterForm, true);
-      window.util.switchFormElement(adForm, true);
-      map.classList.remove('map--faded');
-      adForm.classList.remove('ad-form--disabled');
-      renderAllPins(mapPins, arrayOfPins);
+      window.backend.load(onload, onError);
     }
   };
 
@@ -98,7 +97,42 @@
   });
 
   setDefautPinPosition(mainPin);
-  window.util.switchFormElement(filterForm, false);
-  window.util.switchFormElement(adForm, false);
+  window.util.setFormStatus(filterForm, true);
+  window.util.setFormStatus(adForm, true);
+
+  // загрузка данных
+
+  var onload = function (pins) {
+    window.util.setFormStatus(filterForm, false);
+    window.util.setFormStatus(adForm, false);
+    map.classList.toggle('map--faded');
+    setDefautPinPosition(mainPin);
+    adForm.classList.toggle('ad-form--disabled');
+    renderAllPins(mapPins, pins);
+  };
+
+  var onError = function (errorMessage) {
+
+    var main = document.querySelector('main');
+
+    var closeErrorPopup = function () {
+      errorPopap.remove();
+      document.removeEventListener('keydown', onErrorPopupEscPress);
+    };
+
+    var onErrorPopupEscPress = function (evt) {
+      window.util.isEscEvent(evt, closeErrorPopup);
+    };
+
+    var errorPopap = errorTemplate.cloneNode(true);
+    var closeError = errorPopap.querySelector('.error__button');
+    errorPopap.querySelector('.error__message').textContent = errorMessage;
+
+    document.addEventListener('keydown', onErrorPopupEscPress);
+
+    errorPopap.addEventListener('click', closeErrorPopup);
+    closeError.addEventListener('click', closeErrorPopup);
+    main.appendChild(errorPopap);
+  };
 
 })();

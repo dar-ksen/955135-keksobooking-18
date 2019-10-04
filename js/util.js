@@ -4,6 +4,22 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
 
+  // функции
+  var getRandomArrayIndex = function (array) {
+    return array[Math.floor(Math.random() * array.length)];
+  };
+
+  var getRandomNumber = function (min, max) {
+    var rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+  };
+
+  var getRandomArray = function (array) {
+    var lastElement = getRandomNumber(0, array.length);
+    return array.slice(0, lastElement);
+  };
+
+  // Клавиши
   var isEscEvent = function (evt, action) {
     if (evt.keyCode === ESC_KEYCODE) {
       action();
@@ -16,20 +32,20 @@
     }
   };
 
-  var switchFormElement = function (form, isActive) {
+  // Активное состояние формы
+  var setFormStatus = function (form, isDisabled) {
     var elems = form.elements;
-    var toggle = true;
-    if (isActive) {
-      toggle = false;
-    }
     for (var i = 0; i < elems.length; i++) {
-      elems[i].disabled = toggle;
+      elems[i].disabled = isDisabled;
     }
   };
 
   window.util = {
+    getRandomArrayIndex: getRandomArrayIndex,
+    getRandomNumber: getRandomNumber,
+    getRandomArray: getRandomArray,
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
-    switchFormElement: switchFormElement,
+    setFormStatus: setFormStatus,
   };
 })();
