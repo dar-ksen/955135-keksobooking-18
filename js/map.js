@@ -2,8 +2,6 @@
 
 (function () {
   var PIN_COUNT = 5;
-  var METHOD_POST = 'POST';
-  var METHOD_GET = 'GET';
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
@@ -47,7 +45,7 @@
 
   var setActiveState = function () {
     if (map.classList.contains('map--faded')) {
-      window.backend.ajax(onLoad, onError, METHOD_GET, URL_LOAD);
+      window.backend.ajax(onLoad, onError, 'GET', URL_LOAD);
     }
   };
 
@@ -150,7 +148,12 @@
   // Отправка данных
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.ajax(onSend, onError, METHOD_POST, URL_SAVE, new FormData(adForm));
+    window.backend.ajax(onSend, onError, 'POST', URL_SAVE, new FormData(adForm));
+  });
+
+  adForm.addEventListener('reset', function (evt) {
+    evt.preventDefault();
+    setPassiveState();
   });
 
   setMainPinPosition();
@@ -158,5 +161,6 @@
   window.util.setFormStatus(adForm, true);
   window.form.getHousingPrice();
   window.form.renderCapacity();
+
 
 })();
