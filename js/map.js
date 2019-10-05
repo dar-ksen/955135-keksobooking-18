@@ -61,7 +61,6 @@
     if (card) {
       card.remove();
     }
-    adForm.reset();
     mainPin.style.left = defautPinPosition.x;
     mainPin.style.top = defautPinPosition.y;
     setMainPinPosition();
@@ -142,7 +141,7 @@
 
   var onSend = function () {
     window.message.showMessage();
-    setPassiveState();
+    adForm.reset();
   };
 
   // Отправка данных
