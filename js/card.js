@@ -6,6 +6,17 @@
   var photoTemplate = cardTemplate.querySelector('.popup__photo');
   var featureTemplate = cardTemplate.querySelector('.popup__feature');
 
+  var popap;
+
+  var closePopup = function () {
+    popap.remove();
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
+
+  var onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
   var isPopupActive = function (popup) {
     return map.contains(popup);
   };
@@ -40,7 +51,7 @@
     photoContainer.appendChild(fragment);
   };
 
-  var createCard = function (cardElement, card) {
+  var fillCard = function (cardElement, card) {
     cardElement.querySelector('.popup__avatar').src = card.author.avatar;
     cardElement.querySelector('.popup__title').textContent = card.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -55,27 +66,19 @@
 
   window.card = {
     renderCard: function (container, card) {
-      var cardElement = map.querySelector('.popup');
+      popap = map.querySelector('.popup');
 
-      var closePopup = function () {
-        cardElement.remove();
-        document.removeEventListener('keydown', onPopupEscPress);
-      };
-
-      var onPopupEscPress = function (evt) {
-        window.util.isEscEvent(evt, closePopup);
-      };
-
-      if (isPopupActive(cardElement)) {
-        createCard(cardElement, card);
+      if (isPopupActive(popap)) {
+        fillCard(popap, card);
       } else {
-        cardElement = cardTemplate.cloneNode(true);
-        createCard(cardElement, card);
+        popap = cardTemplate.cloneNode(true);
+        fillCard(popap, card);
         document.addEventListener('keydown', onPopupEscPress);
-        var closeButton = cardElement.querySelector('.popup__close');
+        var closeButton = popap.querySelector('.popup__close');
         closeButton.addEventListener('click', closePopup);
-        container.insertBefore(cardElement, map.querySelector('.map__pins').nextSibling);
+        container.insertBefore(popap, map.querySelector('.map__pins').nextSibling);
       }
     },
+    closePopup: closePopup,
   };
 })();

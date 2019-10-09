@@ -57,5 +57,6 @@
   window.form = {
     'getHousingPrice': getHousingPrice,
     'renderCapacity': renderCapacity,
+    'getActiveSelectOptionValue': getActiveSelectOptionValue,
   };
 })();
