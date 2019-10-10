@@ -40,6 +40,16 @@
     }
   };
 
+  var isMassiveInclude = function (where, what) {
+    var isInclude = true;
+    for (var i = 0; i < what.length; i++) {
+      if (!(where.includes(what[i]))) {
+        isInclude = false;
+      }
+    }
+    return isInclude;
+  };
+
   window.util = {
     getRandomArrayIndex: getRandomArrayIndex,
     getRandomNumber: getRandomNumber,
@@ -47,5 +57,6 @@
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
     setFormStatus: setFormStatus,
+    isMassiveInclude: isMassiveInclude,
   };
 })();

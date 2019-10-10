@@ -1,14 +1,12 @@
 'use strict';
 
 (function () {
-  var PIN_COUNT = 5;
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
   var mainPinOffsetX = 32;
   var mainPinOffsetYActive = 70;
   var mainPinOffsetYPassive = 32;
-  var mapPins = document.querySelector('.map__pins');
   var map = window.data.map;
   var filterForm = window.data.filterForm;
   var mainPin = map.querySelector('.map__pin--main');
@@ -21,15 +19,6 @@
   };
 
   var arrayOfPins;
-
-  var renderAllPins = function (container, arrayPins) {
-    var fragment = document.createDocumentFragment();
-    var takeNumber = arrayPins.length > PIN_COUNT ? PIN_COUNT : arrayPins.length;
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(window.pin.renderPinAttributs(arrayPins[i]));
-    }
-    container.appendChild(fragment);
-  };
 
   var getMainPinPosition = function () {
     var offsetY = map.classList.contains('map--faded') ? mainPinOffsetYPassive : mainPinOffsetYActive;
@@ -123,26 +112,8 @@
     window.util.isEnterEvent(evt, setActiveState);
   });
 
-  var filterPins = function (type) {
-
-    window.data.deletePins();
-    window.card.closePopup();
-    var sameTypePine = arrayOfPins;
-
-    if (!(type === 'any')) {
-      sameTypePine = arrayOfPins.filter(function (it) {
-        return it.offer.type === type;
-      });
-    }
-
-    renderAllPins(mapPins, sameTypePine);
-  };
-
-  var housingType = document.querySelector('#housing-type');
-
-  housingType.addEventListener('change', function () {
-    var type = window.form.getActiveSelectOptionValue(housingType);
-    filterPins(type);
+  filterForm.addEventListener('change', function () {
+    window.debounce(window.filter.filterPins)(arrayOfPins);
   });
 
   // загрузка данных
@@ -154,7 +125,7 @@
     setMainPinPosition();
     adForm.classList.toggle('ad-form--disabled');
     arrayOfPins = data;
-    renderAllPins(mapPins, arrayOfPins);
+    window.pin.renderAllPins(arrayOfPins);
   };
 
   var onError = function (errorMessage) {
