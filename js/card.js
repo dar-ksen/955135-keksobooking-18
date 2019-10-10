@@ -6,7 +6,20 @@
   var photoTemplate = cardTemplate.querySelector('.popup__photo');
   var featureTemplate = cardTemplate.querySelector('.popup__feature');
 
-  var isPopupActive = function (popup) {
+  var popup;
+
+  var closePopup = function () {
+    if (isPopupActive()) {
+      popup.remove();
+      document.removeEventListener('keydown', onPopupEscPress);
+    }
+  };
+
+  var onPopupEscPress = function (evt) {
+    window.util.isEscEvent(evt, closePopup);
+  };
+
+  var isPopupActive = function () {
     return map.contains(popup);
   };
 
@@ -40,7 +53,7 @@
     photoContainer.appendChild(fragment);
   };
 
-  var createCard = function (cardElement, card) {
+  var fillCard = function (cardElement, card) {
     cardElement.querySelector('.popup__avatar').src = card.author.avatar;
     cardElement.querySelector('.popup__title').textContent = card.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -55,27 +68,19 @@
 
   window.card = {
     renderCard: function (container, card) {
-      var cardElement = map.querySelector('.popup');
+      popup = map.querySelector('.popup');
 
-      var closePopup = function () {
-        cardElement.remove();
-        document.removeEventListener('keydown', onPopupEscPress);
-      };
-
-      var onPopupEscPress = function (evt) {
-        window.util.isEscEvent(evt, closePopup);
-      };
-
-      if (isPopupActive(cardElement)) {
-        createCard(cardElement, card);
+      if (isPopupActive()) {
+        fillCard(popup, card);
       } else {
-        cardElement = cardTemplate.cloneNode(true);
-        createCard(cardElement, card);
+        popup = cardTemplate.cloneNode(true);
+        fillCard(popup, card);
         document.addEventListener('keydown', onPopupEscPress);
-        var closeButton = cardElement.querySelector('.popup__close');
+        var closeButton = popup.querySelector('.popup__close');
         closeButton.addEventListener('click', closePopup);
-        container.insertBefore(cardElement, map.querySelector('.map__pins').nextSibling);
+        container.insertBefore(popup, map.querySelector('.map__pins').nextSibling);
       }
     },
+    closePopup: closePopup,
   };
 })();

@@ -8,7 +8,6 @@
   var mainPinOffsetX = 32;
   var mainPinOffsetYActive = 70;
   var mainPinOffsetYPassive = 32;
-  // var arrayOfPins = window.data.getArrayOfPins(PIN_COUNT);
   var mapPins = document.querySelector('.map__pins');
   var map = window.data.map;
   var filterForm = window.data.filterForm;
@@ -21,9 +20,12 @@
     'y': mainPin.style.top,
   };
 
+  var arrayOfPins;
+
   var renderAllPins = function (container, arrayPins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < PIN_COUNT; i++) {
+    var takeNumber = arrayPins.length > PIN_COUNT ? PIN_COUNT : arrayPins.length;
+    for (var i = 0; i < takeNumber; i++) {
       fragment.appendChild(window.pin.renderPinAttributs(arrayPins[i]));
     }
     container.appendChild(fragment);
@@ -50,17 +52,14 @@
   };
 
   var setPassiveState = function () {
+    adForm.reset();
+    filterForm.reset();
     map.classList.toggle('map--faded');
     adForm.classList.toggle('ad-form--disabled');
     window.util.setFormStatus(filterForm, true);
     window.util.setFormStatus(adForm, true);
-    [].forEach.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'), function (pin) {
-      pin.parentNode.removeChild(pin);
-    });
-    var card = map.querySelector('.popup');
-    if (card) {
-      card.remove();
-    }
+    window.data.deletePins();
+    window.card.closePopup();
     mainPin.style.left = defautPinPosition.x;
     mainPin.style.top = defautPinPosition.y;
     setMainPinPosition();
@@ -124,15 +123,38 @@
     window.util.isEnterEvent(evt, setActiveState);
   });
 
+  var filterPins = function (type) {
+
+    window.data.deletePins();
+    window.card.closePopup();
+    var sameTypePine = arrayOfPins;
+
+    if (!(type === 'any')) {
+      sameTypePine = arrayOfPins.filter(function (it) {
+        return it.offer.type === type;
+      });
+    }
+
+    renderAllPins(mapPins, sameTypePine);
+  };
+
+  var housingType = document.querySelector('#housing-type');
+
+  housingType.addEventListener('change', function () {
+    var type = window.form.getActiveSelectOptionValue(housingType);
+    filterPins(type);
+  });
+
   // загрузка данных
 
-  var onLoad = function (pins) {
+  var onLoad = function (data) {
     window.util.setFormStatus(filterForm, false);
     window.util.setFormStatus(adForm, false);
     map.classList.toggle('map--faded');
     setMainPinPosition();
     adForm.classList.toggle('ad-form--disabled');
-    renderAllPins(mapPins, pins);
+    arrayOfPins = data;
+    renderAllPins(mapPins, arrayOfPins);
   };
 
   var onError = function (errorMessage) {
@@ -141,7 +163,7 @@
 
   var onSend = function () {
     window.message.showMessage();
-    adForm.reset();
+    setPassiveState();
   };
 
   // Отправка данных
@@ -150,7 +172,9 @@
     window.backend.ajax(onSend, onError, 'POST', URL_SAVE, new FormData(adForm));
   });
 
-  adForm.addEventListener('reset', function (evt) {
+  var resetButton = adForm.querySelector('.ad-form__reset');
+
+  resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
     setPassiveState();
   });
@@ -160,6 +184,5 @@
   window.util.setFormStatus(adForm, true);
   window.form.getHousingPrice();
   window.form.renderCapacity();
-
 
 })();

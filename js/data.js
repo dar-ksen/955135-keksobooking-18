@@ -25,10 +25,17 @@
     },
   };
 
+  var deletePins = function () {
+    [].forEach.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'), function (pin) {
+      pin.parentNode.removeChild(pin);
+    });
+  };
+
   window.data = {
     map: map,
     filterForm: filterForm,
     adForm: adForm,
+    deletePins: deletePins,
     TYPE_OF_HOUSE: TYPE_OF_HOUSE,
     OFFSET_X: 25,
     OFFSET_Y: 70,
