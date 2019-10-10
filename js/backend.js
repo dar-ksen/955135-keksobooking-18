@@ -9,10 +9,6 @@
   };
 
   var ajax = function (onLoad, onError, method, url, data) {
-    if (!data) {
-      data = null;
-    }
-
     var xhr = new XMLHttpRequest();
     xhr.responseType = REQUIRED_TYPE;
     xhr.addEventListener('load', function () {
