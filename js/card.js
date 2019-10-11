@@ -33,11 +33,11 @@
     var featureContainer = card.querySelector('.popup__features');
     var fragment = document.createDocumentFragment();
     cleanContainer(featureContainer);
-    for (var i = 0; i < features.length; i++) {
+    features.forEach(function (item) {
       var feature = featureTemplate.cloneNode(true);
-      feature.className = 'popup__feature popup__feature--' + features[i];
+      feature.className = 'popup__feature popup__feature--' + item;
       fragment.appendChild(feature);
-    }
+    });
     featureContainer.appendChild(fragment);
   };
 
@@ -45,11 +45,11 @@
     var photoContainer = card.querySelector('.popup__photos');
     var fragment = document.createDocumentFragment();
     cleanContainer(photoContainer);
-    for (var i = 0; i < photos.length; i++) {
+    photos.forEach(function (item) {
       var photo = photoTemplate.cloneNode(true);
-      photo.src = photos[i];
+      photo.src = item;
       fragment.appendChild(photo);
-    }
+    });
     photoContainer.appendChild(fragment);
   };
 
