@@ -31,10 +31,11 @@
     });
   };
 
-  var clearPins = function () {
-    [].forEach.call(map.querySelectorAll('.map__pin--active)'), function (pin) {
-      pin.classList.remove('map__pin--active');
-    });
+  var clearPin = function () {
+    var activePin = document.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
   };
 
   window.data = {
@@ -42,7 +43,7 @@
     filterForm: filterForm,
     adForm: adForm,
     deletePins: deletePins,
-    clearPins: clearPins,
+    clearPin: clearPin,
     TYPE_OF_HOUSE: TYPE_OF_HOUSE,
     OFFSET_X: 25,
     OFFSET_Y: 70,

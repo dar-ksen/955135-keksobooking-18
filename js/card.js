@@ -9,7 +9,7 @@
   var popup;
 
   var closePopup = function () {
-    window.data.clearPins();
+    window.data.clearPin();
     if (isPopupActive()) {
       popup.remove();
       document.removeEventListener('keydown', onPopupEscPress);
