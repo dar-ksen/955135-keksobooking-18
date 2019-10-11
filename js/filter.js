@@ -1,6 +1,11 @@
 'use strict';
 
 (function () {
+  var Price = {
+    LOW: 10000,
+    HIGH: 50000,
+  };
+
   var filterForm = window.data.filterForm;
   var housingType = filterForm.querySelector('#housing-type');
   var housingPrice = filterForm.querySelector('#housing-price');
@@ -22,13 +27,13 @@
     var isRequiredPrice;
     switch (selectedPrice) {
       case 'middle':
-        isRequiredPrice = (price > 10000) && (price < 50000);
+        isRequiredPrice = (price >= Price.LOW) && (price < Price.HIGH);
         break;
       case 'low':
-        isRequiredPrice = (price < 1000);
+        isRequiredPrice = (price < Price.LOW);
         break;
       case 'high':
-        isRequiredPrice = (price > 50000);
+        isRequiredPrice = (price >= Price.HIGH);
         break;
       default:
         isRequiredPrice = true;

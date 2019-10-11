@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var map = window.data.map;
   var PIN_COUNT = 5;
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPins = document.querySelector('.map__pins');
@@ -13,7 +12,7 @@
     pinElement.querySelector('img').src = pin.author.avatar;
     pinElement.querySelector('img').alt = pin.offer.description;
     pinElement.addEventListener('click', function () {
-      window.card.renderCard(map, pin);
+      window.card.renderCard(pin, pinElement);
     });
     return pinElement;
   };
