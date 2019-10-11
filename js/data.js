@@ -32,7 +32,7 @@
   };
 
   var clearPins = function () {
-    [].forEach.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'), function (pin) {
+    [].forEach.call(map.querySelectorAll('.map__pin--active)'), function (pin) {
       pin.classList.remove('map__pin--active');
     });
   };
