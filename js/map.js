@@ -13,10 +13,12 @@
   var mainPinPosition = document.querySelector('#address');
   var adForm = window.data.adForm;
 
-  var defautPinPosition = {
-    'x': mainPin.style.left,
-    'y': mainPin.style.top,
+  var Coordinate = function (x, y) {
+    this.x = x;
+    this.y = y;
   };
+
+  var defautPinPosition = new Coordinate(mainPin.style.left, mainPin.style.top);
 
   var arrayOfPins;
 
@@ -60,28 +62,16 @@
     evt.preventDefault();
     setActiveState();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      startCoords = new Coordinate(moveEvt.clientX, moveEvt.clientY);
 
-      var endCoords = {
-        x: getMainPinPosition().x - shift.x,
-        y: getMainPinPosition().y - shift.y
-      };
+      var endCoords = new Coordinate(getMainPinPosition().x - shift.x, getMainPinPosition().y - shift.y);
 
       if ((endCoords.x >= window.data.LOCATION_X_MIN) && (endCoords.x <= window.data.LOCATION_X_MAX)) {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
