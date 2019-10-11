@@ -31,11 +31,18 @@
     });
   };
 
+  var clearPins = function () {
+    [].forEach.call(map.querySelectorAll('.map__pin--active)'), function (pin) {
+      pin.classList.remove('map__pin--active');
+    });
+  };
+
   window.data = {
     map: map,
     filterForm: filterForm,
     adForm: adForm,
     deletePins: deletePins,
+    clearPins: clearPins,
     TYPE_OF_HOUSE: TYPE_OF_HOUSE,
     OFFSET_X: 25,
     OFFSET_Y: 70,

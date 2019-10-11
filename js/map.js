@@ -1,35 +1,26 @@
 'use strict';
 
 (function () {
-  var PIN_COUNT = 5;
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
   var mainPinOffsetX = 32;
   var mainPinOffsetYActive = 70;
   var mainPinOffsetYPassive = 32;
-  var mapPins = document.querySelector('.map__pins');
   var map = window.data.map;
   var filterForm = window.data.filterForm;
   var mainPin = map.querySelector('.map__pin--main');
   var mainPinPosition = document.querySelector('#address');
   var adForm = window.data.adForm;
 
-  var defautPinPosition = {
-    'x': mainPin.style.left,
-    'y': mainPin.style.top,
+  var Coordinate = function (x, y) {
+    this.x = x;
+    this.y = y;
   };
+
+  var defautPinPosition = new Coordinate(mainPin.style.left, mainPin.style.top);
 
   var arrayOfPins;
-
-  var renderAllPins = function (container, arrayPins) {
-    var fragment = document.createDocumentFragment();
-    var takeNumber = arrayPins.length > PIN_COUNT ? PIN_COUNT : arrayPins.length;
-    for (var i = 0; i < takeNumber; i++) {
-      fragment.appendChild(window.pin.renderPinAttributs(arrayPins[i]));
-    }
-    container.appendChild(fragment);
-  };
 
   var getMainPinPosition = function () {
     var offsetY = map.classList.contains('map--faded') ? mainPinOffsetYPassive : mainPinOffsetYActive;
@@ -71,28 +62,16 @@
     evt.preventDefault();
     setActiveState();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      startCoords = new Coordinate(moveEvt.clientX, moveEvt.clientY);
 
-      var endCoords = {
-        x: getMainPinPosition().x - shift.x,
-        y: getMainPinPosition().y - shift.y
-      };
+      var endCoords = new Coordinate(getMainPinPosition().x - shift.x, getMainPinPosition().y - shift.y);
 
       if ((endCoords.x >= window.data.LOCATION_X_MIN) && (endCoords.x <= window.data.LOCATION_X_MAX)) {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
@@ -123,26 +102,8 @@
     window.util.isEnterEvent(evt, setActiveState);
   });
 
-  var filterPins = function (type) {
-
-    window.data.deletePins();
-    window.card.closePopup();
-    var sameTypePine = arrayOfPins;
-
-    if (!(type === 'any')) {
-      sameTypePine = arrayOfPins.filter(function (it) {
-        return it.offer.type === type;
-      });
-    }
-
-    renderAllPins(mapPins, sameTypePine);
-  };
-
-  var housingType = document.querySelector('#housing-type');
-
-  housingType.addEventListener('change', function () {
-    var type = window.form.getActiveSelectOptionValue(housingType);
-    filterPins(type);
+  filterForm.addEventListener('change', function () {
+    window.debounce(window.filter.filterPins)(arrayOfPins);
   });
 
   // загрузка данных
@@ -154,7 +115,7 @@
     setMainPinPosition();
     adForm.classList.toggle('ad-form--disabled');
     arrayOfPins = data;
-    renderAllPins(mapPins, arrayOfPins);
+    window.pin.renderAllPins(arrayOfPins);
   };
 
   var onError = function (errorMessage) {
