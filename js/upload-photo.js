@@ -15,7 +15,7 @@
     userAvatar.src = result;
   };
 
-  var createuserPhoto = function (result) {
+  var createUserPhoto = function (result) {
     var imgContainer = userPhoto.cloneNode(true);
     imgContainer.classList.add('ad-form__photo--js');
     var newPhoto = document.createElement('img');
@@ -59,7 +59,7 @@
   };
 
   chooseFile(fileChooserAvatar, chooseAvatar);
-  chooseFile(fileChooserPhotos, createuserPhoto);
+  chooseFile(fileChooserPhotos, createUserPhoto);
 
   window.uploadPhoto = {
     clearPhotoUpload: clearPhotoUpload,
