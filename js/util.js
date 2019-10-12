@@ -40,7 +40,7 @@
     }
   };
 
-  var isMassiveInclude = function (where, what) {
+  var isArrayInclude = function (where, what) {
     var isInclude = true;
     for (var i = 0; i < what.length; i++) {
       if (!(where.includes(what[i]))) {
@@ -57,6 +57,6 @@
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
     setFormStatus: setFormStatus,
-    isMassiveInclude: isMassiveInclude,
+    isArrayInclude: isArrayInclude,
   };
 })();
