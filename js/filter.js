@@ -52,8 +52,8 @@
     sameTypePine = arrayOfPins.filter(function (it) {
       var isRequiredType = (type === 'any') ? true : it.offer.type === type;
       var isRequiredPrice = determinePrice(it.offer.price);
-      var isRequiredRooms = (rooms === 'any') ? true : it.offer.rooms === +rooms;
-      var isRequiredGuests = (guests === 'any') ? true : it.offer.guests === +guests;
+      var isRequiredRooms = (rooms === 'any') ? true : it.offer.rooms === parseInt(rooms, 10);
+      var isRequiredGuests = (guests === 'any') ? true : it.offer.guests === parseInt(guests, 10);
       var isRequiredFeatures = determineFeatures(it.offer.features);
       return isRequiredType && isRequiredPrice && isRequiredRooms && isRequiredGuests && isRequiredFeatures;
     });
