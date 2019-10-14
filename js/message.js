@@ -30,7 +30,7 @@
   };
 
   window.message = {
-    showMessage: showMessage,
+    show: showMessage,
   };
 
 })();

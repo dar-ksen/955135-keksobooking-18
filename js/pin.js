@@ -12,7 +12,7 @@
     pinElement.querySelector('img').src = pin.author.avatar;
     pinElement.querySelector('img').alt = pin.offer.description;
     pinElement.addEventListener('click', function () {
-      window.card.renderCard(pin, pinElement);
+      window.card.render(pin, pinElement);
     });
     return pinElement;
   };
@@ -27,7 +27,7 @@
   };
 
   window.pin = {
-    renderAllPins: renderAllPins,
+    renderAll: renderAllPins,
   };
 
 })();
