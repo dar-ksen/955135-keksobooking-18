@@ -55,8 +55,8 @@
   });
 
   window.form = {
-    'getHousingPrice': getHousingPrice,
-    'renderCapacity': renderCapacity,
-    'getActiveSelectOptionValue': getActiveSelectOptionValue,
+    getHousingPrice: getHousingPrice,
+    renderCapacity: renderCapacity,
+    getActiveSelectOptionValue: getActiveSelectOptionValue,
   };
 })();

@@ -1,11 +1,6 @@
 'use strict';
 
 (function () {
-
-  var map = document.querySelector('.map');
-  var filterForm = map.querySelector('.map__filters');
-  var adForm = document.querySelector('.ad-form');
-
   var TYPE_OF_HOUSE = {
     'palace': {
       'text': 'Дворец',
@@ -24,6 +19,10 @@
       'minPrice': 0,
     },
   };
+
+  var map = document.querySelector('.map');
+  var filterForm = map.querySelector('.map__filters');
+  var adForm = document.querySelector('.ad-form');
 
   var deletePins = function () {
     [].forEach.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'), function (pin) {

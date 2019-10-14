@@ -58,10 +58,10 @@
       return isRequiredType && isRequiredPrice && isRequiredRooms && isRequiredGuests && isRequiredFeatures;
     });
 
-    window.pin.renderAllPins(sameTypePine);
+    window.pin.renderAll(sameTypePine);
   });
 
   window.filter = {
-    filterPins: filterPins,
+    pins: filterPins,
   };
 })();

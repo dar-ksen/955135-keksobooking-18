@@ -73,7 +73,7 @@
   };
 
   window.card = {
-    renderCard: function (card, pinElement) {
+    render: function (card, pinElement) {
       popup = map.querySelector('.popup');
       closePopup();
       createCard(card);

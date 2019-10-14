@@ -30,7 +30,6 @@
     xhr.open(method, url);
 
     xhr.send(data);
-
   };
 
   window.backend = {

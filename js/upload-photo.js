@@ -38,7 +38,7 @@
     }
   };
 
-  var chooseFile = function (fileUploader, act) {
+  var chooseFile = function (fileUploader, action) {
     fileUploader.addEventListener('change', function () {
       var file = fileUploader.files[0];
       if (file) {
@@ -51,7 +51,7 @@
       if (matches) {
         var reader = new FileReader();
         reader.addEventListener('load', function () {
-          act(reader.result);
+          action(reader.result);
         });
         reader.readAsDataURL(file);
       }
@@ -62,6 +62,6 @@
   chooseFile(fileChooserPhotos, createUserPhoto);
 
   window.uploadPhoto = {
-    clearPhotoUpload: clearPhotoUpload,
+    clear: clearPhotoUpload,
   };
 })();

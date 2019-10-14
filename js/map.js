@@ -53,7 +53,7 @@
     setMainPinPosition();
     window.form.getHousingPrice();
     window.form.renderCapacity();
-    window.uploadPhoto.clearPhotoUpload();
+    window.uploadPhoto.clear();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
@@ -101,7 +101,7 @@
   });
 
   filterForm.addEventListener('change', function () {
-    window.filter.filterPins(arrayOfPins);
+    window.filter.pins(arrayOfPins);
   });
 
   // загрузка данных
@@ -113,15 +113,15 @@
     setMainPinPosition();
     adForm.classList.remove('ad-form--disabled');
     arrayOfPins = data;
-    window.pin.renderAllPins(arrayOfPins);
+    window.pin.renderAll(arrayOfPins);
   };
 
   var onError = function (errorMessage) {
-    window.message.showMessage(errorMessage);
+    window.message.show(errorMessage);
   };
 
   var onSend = function () {
-    window.message.showMessage();
+    window.message.show();
     setPassiveState();
   };
 
