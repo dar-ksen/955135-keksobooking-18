@@ -32,9 +32,10 @@
   };
 
   var clearPins = function () {
-    [].forEach.call(map.querySelectorAll('.map__pin--active)'), function (pin) {
-      pin.classList.remove('map__pin--active');
-    });
+    var activePin = map.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
   };
 
   window.data = {

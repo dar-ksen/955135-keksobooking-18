@@ -24,10 +24,7 @@
 
   var getMainPinPosition = function () {
     var offsetY = map.classList.contains('map--faded') ? mainPinOffsetYPassive : mainPinOffsetYActive;
-    var position = {
-      'x': mainPin.offsetLeft + mainPinOffsetX,
-      'y': mainPin.offsetTop + offsetY,
-    };
+    var position = new Coordinate(mainPin.offsetLeft + mainPinOffsetX, mainPin.offsetTop + offsetY);
     return position;
   };
 
@@ -45,8 +42,8 @@
   var setPassiveState = function () {
     adForm.reset();
     filterForm.reset();
-    map.classList.toggle('map--faded');
-    adForm.classList.toggle('ad-form--disabled');
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
     window.util.setFormStatus(filterForm, true);
     window.util.setFormStatus(adForm, true);
     window.data.deletePins();
@@ -56,6 +53,7 @@
     setMainPinPosition();
     window.form.getHousingPrice();
     window.form.renderCapacity();
+    window.uploadPhoto.clearPhotoUpload();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
@@ -111,9 +109,9 @@
   var onLoad = function (data) {
     window.util.setFormStatus(filterForm, false);
     window.util.setFormStatus(adForm, false);
-    map.classList.toggle('map--faded');
+    map.classList.remove('map--faded');
     setMainPinPosition();
-    adForm.classList.toggle('ad-form--disabled');
+    adForm.classList.remove('ad-form--disabled');
     arrayOfPins = data;
     window.pin.renderAllPins(arrayOfPins);
   };

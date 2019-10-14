@@ -19,7 +19,7 @@
     for (var i = 0; i < features.length; i++) {
       requiredFeatures.push(features[i].value);
     }
-    return window.util.isMassiveInclude(availableFeatures, requiredFeatures);
+    return window.util.isArrayInclude(availableFeatures, requiredFeatures);
   };
 
   var determinePrice = function (price) {
@@ -40,7 +40,6 @@
     }
 
     return isRequiredPrice;
-
   };
 
   var filterPins = function (arrayOfPins) {
