@@ -101,7 +101,7 @@
   });
 
   filterForm.addEventListener('change', function () {
-    window.debounce(window.filter.filterPins)(arrayOfPins);
+    window.filter.filterPins(arrayOfPins);
   });
 
   // загрузка данных

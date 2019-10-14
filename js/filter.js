@@ -42,7 +42,7 @@
     return isRequiredPrice;
   };
 
-  var filterPins = function (arrayOfPins) {
+  var filterPins = window.debounce(function (arrayOfPins) {
     window.data.deletePins();
     window.card.closePopup();
     var sameTypePine = arrayOfPins;
@@ -59,7 +59,7 @@
     });
 
     window.pin.renderAllPins(sameTypePine);
-  };
+  });
 
   window.filter = {
     filterPins: filterPins,
