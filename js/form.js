@@ -18,7 +18,7 @@
     var options = capacity.querySelectorAll('option');
     var room = getActiveSelectOptionValue(roomNumber);
     for (var i = 0; i < options.length; i++) {
-      if ((room >= options[i].value) && (options[i].value !== '0')) {
+      if ((room >= options[i].value) && (options[i].value !== '0') && (room !== NUMBER_OF_ROOMS_EXSEPTION)) {
         options[i].disabled = false;
       } else if ((room === NUMBER_OF_ROOMS_EXSEPTION) && (options[i].value === '0')) {
         options[i].disabled = false;

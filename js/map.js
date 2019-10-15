@@ -5,7 +5,7 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
   var mainPinOffsetX = 32;
-  var mainPinOffsetYActive = 70;
+  var mainPinOffsetYActive = 80;
   var mainPinOffsetYPassive = 32;
   var map = window.data.map;
   var filterForm = window.data.filterForm;
